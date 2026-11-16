@@ -922,6 +922,39 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .edt ul[hidden]{display:none}
 .edt ul.op{animation:fade .28s ease}
 @media (max-width:760px){.edt{min-width:0}.edt-cols{grid-template-columns:minmax(0,1fr)}.edt-cols::before,.edt-col::before{display:none}}
+
+/* ---------- Semáforo de riesgos ---------- */
+.sem-wrap{display:grid;grid-template-columns:auto minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.sem{background:var(--ink);border-radius:28px;padding:16px 14px;display:grid;gap:12px;justify-items:center;box-shadow:0 10px 24px -14px var(--ink)}
+.sem .lamp{all:unset;cursor:pointer;display:grid;justify-items:center;gap:4px;padding:6px 8px;border-radius:16px;transition:transform .15s}
+.sem .lamp:hover{transform:scale(1.04)}
+.sem .lamp:focus-visible{outline:3px solid var(--surface);outline-offset:2px}
+.sem .bulb{width:72px;height:72px;border-radius:50%;background:var(--c);opacity:.28;display:grid;place-items:center;font:800 28px var(--f-display);color:var(--surface);transition:opacity .25s,box-shadow .25s}
+.sem .lamp[aria-pressed="true"] .bulb,.sem.all .bulb{opacity:1;box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 35%,transparent),0 0 26px 6px color-mix(in srgb,var(--c) 70%,transparent)}
+.sem .lname{font:700 14px var(--f-body);color:var(--surface);letter-spacing:.04em;text-transform:uppercase}
+.sem .all-btn{all:unset;cursor:pointer;font:600 13px var(--f-body);color:var(--surface);border:1px solid color-mix(in srgb,var(--surface) 45%,transparent);border-radius:999px;padding:4px 12px}
+.sem .all-btn[aria-pressed="true"]{background:var(--surface);color:var(--ink)}
+.lv-r{--c:var(--bad)}.lv-a{--c:#E0A100}.lv-v{--c:var(--ok)}
+.sem .lv-a .bulb,.smx .rk.lv-a[aria-pressed="true"]{color:var(--ink)}
+.smx{display:grid;grid-template-columns:72px repeat(3,minmax(0,1fr));gap:6px}
+.smx .ax{font:600 15px var(--f-body);color:var(--muted);text-align:center;align-self:end}
+.smx .ay{font:600 15px var(--f-body);color:var(--muted);align-self:center}
+.smx .sc{min-height:104px;border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;background:color-mix(in srgb,var(--c) 16%,var(--surface));border:2px solid color-mix(in srgb,var(--c) 45%,transparent);transition:opacity .25s,filter .25s}
+.smx .sc.dim{opacity:.25;filter:grayscale(.7)}
+.smx .rk{all:unset;cursor:pointer;font:700 19px var(--f-mono);padding:7px 11px;border-radius:9px;background:var(--surface);color:var(--ink);border:2px solid var(--c);transition:transform .15s,background-color .2s}
+.smx .rk:hover{transform:translateY(-2px)}
+.smx .rk[aria-pressed="true"]{background:var(--c);color:var(--surface)}
+.smx .rk:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.sdet{border-left:8px solid var(--c);background:var(--surface);border-radius:12px;padding:16px 18px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sdet .mini{display:inline-flex;gap:7px;vertical-align:middle;margin-right:12px;background:var(--ink);padding:6px 9px;border-radius:999px}
+.sdet .mini i{width:20px;height:20px;border-radius:50%;background:var(--c);opacity:.25}
+.sdet .mini i.on{opacity:1}
+.sdet .lvt{font:800 24px var(--f-display);vertical-align:middle;color:var(--c);text-transform:uppercase;letter-spacing:.04em}
+.slist{display:grid;gap:6px;margin-top:6px}
+.slist button{all:unset;cursor:pointer;display:flex;gap:10px;align-items:baseline;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font:500 16px var(--f-body);color:var(--ink)}
+.slist button:hover{border-color:var(--c)}
+.slist b{font-family:var(--f-mono);color:var(--c)}
+@media (max-width:900px){.sem-wrap{grid-template-columns:minmax(0,1fr)}.sem{grid-auto-flow:column;justify-content:center}}
 </style>
 </head>
 <body>
@@ -994,7 +1027,7 @@ D({id:"charter",n:"01",name:"Project Charter",file:"01_ProjectCharter ChurriHub.
  value:"El Sponsor sabe qué va a recibir, cuánto cuesta (tope USD 43.300) y con qué indicadores va a aprobar el cierre.",
  body:()=>{later(()=>tabs("ch","kpi"));
  return `<div class="row">${[["kpi","Criterios de éxito"],["in","Alcance"],["out","Fuera de alcance"],["re","Restricciones"],["su","Supuestos"],["tri","Si hay un desvío"]].map(([k,l])=>`<button class="btn" data-tab="ch:${k}" type="button">${l}</button>`).join("")}</div>
- <div data-pane="ch:kpi" class="scroll"><table><thead><tr><th>Indicador</th><th>Hoy</th><th>Meta</th><th>Cuándo se mide</th></tr></thead><tbody>${[["Sucursales integradas","0","1","Cierre de Fase 04"],["Horas semanales de consolidación","≈ 6 h","≤ 0,5 h","30 días post despliegue"],["Latencia venta → núcleo","Semanal","≤ 15 min","Cierre de Fase 04"],["Reportes automáticos","0 %","≥ 90 %","30 días post despliegue"],["Transacciones sin error","—","≥ 99 % mensual","Fases 04 y 05"],["Disponibilidad","—","≥ 99 % mensual","Post implementación"]].map(r=>`<tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td class="mono"><b>${r[2]}</b></td><td class="lab">${r[3]}</td></tr>`).join("")}</tbody></table></div>
+ <div data-pane="ch:kpi" class="scroll"><table><thead><tr><th>Indicador</th><th>Hoy</th><th>Meta</th><th>Cuándo se mide</th></tr></thead><tbody>${[["Sucursales integradas","0","2","Cierre de Fase 04"],["Horas semanales de consolidación","≈ 6 h","≤ 0,5 h","30 días post despliegue"],["Latencia venta → núcleo","Semanal","≤ 15 min","Cierre de Fase 04"],["Reportes automáticos","0 %","≥ 90 %","30 días post despliegue"],["Transacciones sin error","—","≥ 99 % mensual","Fases 04 y 05"],["Disponibilidad","—","≥ 99 % mensual","Post implementación"]].map(r=>`<tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td class="mono"><b>${r[2]}</b></td><td class="lab">${r[3]}</td></tr>`).join("")}</tbody></table></div>
  <div data-pane="ch:in" class="card"><ul style="margin:0;padding-left:20px;display:grid;gap:6px">${["Gestión del proyecto: plan, seguimiento y riesgos","Relevamiento, arquitectura web, modelo relacional e interfaces","Backend, API y base centralizada conectada a los sistemas de origen","Despliegue en VPS, pruebas de integración y dashboard en Power BI","Piloto en Wilde y después Miramar","Capacitación, documentación y cierre formal"].map(x=>`<li>${x}</li>`).join("")}</ul></div>
  <div data-pane="ch:out" class="card"><ul style="margin:0;padding-left:20px;display:grid;gap:6px">${["Modificar los sistemas de cobro: se integran en solo lectura","Hardware nuevo para los locales","Soporte evolutivo después de los 60 días de garantía","Carga histórica masiva anterior al año en curso","Contabilidad, facturación electrónica o stock externo","Aplicaciones móviles nativas"].map(x=>`<li>${x}</li>`).join("")}</ul></div>
  <div data-pane="ch:re" class="grid">${[["RE-01","Costo","Hasta USD 43.300 (pendiente de aprobación del Sponsor)"],["RE-02","Plazo","Operativo antes del cierre comercial de marzo de 2027"],["RE-03","Tecnología","VPS cloud con PostgreSQL y Power BI"],["RE-05","Recursos","Seis personas con dedicación parcial"],["RE-06","Sistemas de origen","Lovyverse en solo lectura, sin modificarlo"]].map(r=>`<div class="card"><span class="tag mono">${r[0]}</span><h3 style="margin-top:6px">${r[1]}</h3><p class="lab" style="margin:4px 0 0">${r[2]}</p></div>`).join("")}</div>
@@ -1270,7 +1303,7 @@ TS({id:"objetivos",b:1,name:"Objetivos y beneficios",file:"01_ProjectCharter Chu
  return tabBtns("obj",[["pro","Objetivo del proyecto"],["prod","Objetivos del producto"],["kpi","Criterios de éxito"],["ben","Beneficios"]])+
  `<div data-pane="obj:pro" class="card hl"><h3 style="font-size:26px;line-height:1.3">Desarrollar e implementar ChurriHub para centralizar la información de Wilde y Miramar, dentro del plazo y el presupuesto autorizados, con el sistema operativo en ambos locales y el personal gerencial capacitado.</h3></div>
  <div data-pane="obj:prod" class="two"><div class="card hl"><div class="lab">Objetivo principal</div><h3 style="margin-top:6px;font-size:25px;line-height:1.3">Centralizar las bases de las sucursales en un repositorio en la nube, seguro y accesible por web.</h3></div><div class="card"><div class="lab">Objetivos secundarios</div><ul style="margin:8px 0 0;padding-left:22px;display:grid;gap:8px">${["Exponer los datos unificados por APIs para Power BI","Generar los reportes gerenciales semanales en forma automática","Estandarizar las métricas clave: ventas por canal, productos más vendidos y rendimiento por sucursal","Sumar nuevas sucursales sin rediseñar el modelo de datos"].map(x=>`<li>${x}</li>`).join("")}</ul></div></div>
- <div data-pane="obj:kpi" class="scroll"><table style="min-width:620px"><thead><tr><th>Indicador</th><th>Hoy</th><th>Meta</th><th>Cuándo se mide</th></tr></thead><tbody>${[["Sucursales integradas","0","1","Cierre de Fase 04"],["Horas semanales de consolidación","≈ 6 h","≤ 0,5 h","30 días post despliegue"],["Latencia venta → núcleo","Semanal","≤ 15 min","Cierre de Fase 04"],["Reportes automáticos","0 %","≥ 90 %","30 días post despliegue"],["Disponibilidad","—","≥ 99 % mensual","Post implementación"]].map(r=>`<tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td class="mono"><b>${r[2]}</b></td><td class="lab">${r[3]}</td></tr>`).join("")}</tbody></table></div>
+ <div data-pane="obj:kpi" class="scroll"><table style="min-width:620px"><thead><tr><th>Indicador</th><th>Hoy</th><th>Meta</th><th>Cuándo se mide</th></tr></thead><tbody>${[["Sucursales integradas","0","2","Cierre de Fase 04"],["Horas semanales de consolidación","≈ 6 h","≤ 0,5 h","30 días post despliegue"],["Latencia venta → núcleo","Semanal","≤ 15 min","Cierre de Fase 04"],["Reportes automáticos","0 %","≥ 90 %","30 días post despliegue"],["Disponibilidad","—","≥ 99 % mensual","Post implementación"]].map(r=>`<tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td class="mono"><b>${r[2]}</b></td><td class="lab">${r[3]}</td></tr>`).join("")}</tbody></table></div>
  <div data-pane="obj:ben" class="grid">${["Menos tiempo y esfuerzo para consolidar las ventas de los locales","Datos oportunos para decidir más rápido","Detección temprana de patrones de demanda","Infraestructura lista para futuras franquicias","Respaldo centralizado de la información comercial"].map(x=>`<div class="card"><h3>${x}</h3></div>`).join("")}</div>`}});
 
 /* Bloque 3 */
@@ -1359,8 +1392,41 @@ TS({id:"comunicacion",b:4,name:"Matriz de comunicación",file:"04_PlanDeComunica
   $$("button[data-au]").forEach(b=>b.onclick=()=>f(b.dataset.au));f("Todos")});
  return `<div class="row">${["Todos",...AU].map(a=>`<button class="btn" type="button" data-au="${a}">${a}</button>`).join("")}<span class="tag" id="cmn"></span></div>
  <div class="scroll"><table id="cmx" class="cmx" style="min-width:860px"><thead><tr><th>Comunicación</th><th>Frecuencia</th><th>Medio</th><th>Responsable</th>${AU.map(a=>`<th class="c" data-au="${a}">${a}</th>`).join("")}</tr></thead><tbody>${rows.map(c=>`<tr style="cursor:default"><td>${c[0]}</td><td class="mono" style="white-space:nowrap">${c[3]}</td><td>${c[2]}</td><td>${c[4]}</td>${AU.map(a=>`<td class="c">${has(c,a)?"<span></span>":""}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`}});
-TS({id:"riesgos",b:4,name:"Riesgos",file:"10_Plan-de-Riesgos.xlsm",title:"Doce riesgos con dueño, respuesta y responsable",
- lead:"Tocá el número de un riesgo para ver qué es, cómo se responde y quién lo sigue.",body:()=>OLD.riesgos.body()});
+TS({id:"riesgos",b:4,name:"Riesgos",file:"10_Plan-de-Riesgos.xlsm",title:"Doce riesgos en semáforo",
+ lead:"El nivel sale de probabilidad por impacto. Tocá una luz para filtrar o un número para ver el riesgo.",
+ body:()=>{const LV=[["r","Crítico","críticos",e=>e>=.5],["a","Moderado","moderados",e=>e>=.3&&e<.5],["v","Bajo","bajos",e=>e<.3]];
+ const lv=r=>LV.find(l=>l[3](r[2]*r[3]));const ES={Evitar:"Evitar",Mitigar:"Reducir (mitigar)",Transferir:"Transferir",Aceptar:"Aceptar"};const es=id=>ES[RDEF[id].est]||RDEF[id].est;const cnt=k=>RIESGOS.filter(r=>lv(r)[0]===k).length;
+ const P=[.75,.5,.25],I=[.5,.75,1],PN=["alta","media","baja"],IN=["medio","alto","muy alto"];
+ let filt=null,cur="RSK.13";
+ later(()=>{const sem=$("#sem"),det=$("#sdet");
+  const paint=()=>{sem.classList.toggle("all",!filt);
+   $$("#sem .lamp").forEach(b=>b.setAttribute("aria-pressed",String(filt===b.dataset.lv||(!filt&&false))));
+   $("#semAll").setAttribute("aria-pressed",String(!filt));
+   $$("#smx .sc").forEach(c=>c.classList.toggle("dim",!!filt&&c.dataset.lv!==filt));
+   $$("#smx .rk").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.r===cur)))};
+  const showR=id=>{cur=id;const r=RIESGOS.find(x=>x[0]===id),d=RDEF[id],L=lv(r);
+   det.className="sdet lv-"+L[0];
+   det.innerHTML=`<div><span class="mini">${LV.map(l=>`<i class="lv-${l[0]} ${l[0]===L[0]?"on":""}"></i>`).join("")}</span><span class="lvt">${L[1]}</span></div>
+   <div class="lab mono" style="margin-top:10px">${id} · ${d.cat} · Prob. ${PN[P.indexOf(r[2])]} · Impacto ${IN[I.indexOf(r[3])]}</div>
+   <h3 style="margin-top:4px">${d.n}</h3><p style="margin:8px 0">${d.c}</p>
+   <div class="row" style="margin-bottom:8px"><span class="tag">Estrategia: ${es(id)}</span></div>
+   <p style="margin:0 0 6px"><b>Respuesta:</b> ${d.plan}</p><p class="lab" style="margin:0">Responsable: ${d.resp}</p>`;paint()};
+  const showL=k=>{filt=k;const L=LV.find(l=>l[0]===k),rs=RIESGOS.filter(r=>lv(r)[0]===k);
+   det.className="sdet lv-"+k;
+   det.innerHTML=`<div><span class="mini">${LV.map(l=>`<i class="lv-${l[0]} ${l[0]===k?"on":""}"></i>`).join("")}</span><span class="lvt">${L[1]}</span></div>
+   <h3 style="margin-top:10px">${rs.length} ${rs.length===1?"riesgo "+L[1].toLowerCase():"riesgos "+L[2]}</h3>
+   <div class="slist">${rs.map(r=>`<button type="button" data-go-r="${r[0]}"><b>${r[0].slice(4)}</b><span>${RDEF[r[0]].n}</span></button>`).join("")}</div>`;
+   $$("[data-go-r]").forEach(b=>b.onclick=()=>showR(b.dataset.goR));paint()};
+  $$("#sem .lamp").forEach(b=>b.onclick=()=>filt===b.dataset.lv?(filt=null,showR(cur)):showL(b.dataset.lv));
+  $("#semAll").onclick=()=>{filt=null;showR(cur)};
+  $$("#smx .rk").forEach(b=>b.onclick=()=>{const k=lv(RIESGOS.find(x=>x[0]===b.dataset.r))[0];if(filt&&filt!==k)filt=null;showR(b.dataset.r)});
+  showR(cur)});
+ const mx=`<div></div>${IN.map(x=>`<div class="ax">Impacto ${x}</div>`).join("")}`+P.map((p,pi)=>`<div class="ay">Prob. ${PN[pi]}</div>`+I.map(i=>{const k=LV.find(l=>l[3](p*i))[0];return `<div class="sc lv-${k}" data-lv="${k}">${RIESGOS.filter(r=>r[2]===p&&r[3]===i).map(r=>`<button type="button" class="rk lv-${k}" data-r="${r[0]}" title="${RDEF[r[0]].n}">${r[0].slice(4)}</button>`).join("")}</div>`}).join("")).join("");
+ return `<div class="sem-wrap">
+  <div class="sem all" id="sem" role="group" aria-label="Filtrar riesgos por color">${LV.map(l=>`<button type="button" class="lamp lv-${l[0]}" data-lv="${l[0]}" aria-pressed="false"><span class="bulb">${cnt(l[0])}</span><span class="lname">${l[1]}</span></button>`).join("")}<button type="button" class="all-btn" id="semAll" aria-pressed="true">Todos</button></div>
+  <div class="scroll"><div class="smx" id="smx" style="min-width:420px">${mx}</div></div>
+  <div class="sdet" id="sdet" aria-live="polite"></div></div>
+  <p class="lab" style="margin:10px 0 0">Crítico: exposición de 0,50 o más · Moderado: de 0,30 a 0,49 · Bajo: menos de 0,30.</p>`}});
 
 /* Bloque 6 */
 TS({id:"implementacion",b:5,name:"Implementación",file:"Prototipo.url · 02_EDT TuChurrito.pdf · Plan de Comunicaciones",
